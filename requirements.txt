@@ -1,0 +1,11 @@
+streamlit~=1.47.1
+requests~=2.32.4
+pydantic
+soundfile
+streamlit-audiorecorder
+fastapi~=0.116.1
+uvicorn
+faster-whisper
+soundfile
+python-multipart
+pydub~=0.25.1
