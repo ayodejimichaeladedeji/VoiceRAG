@@ -9,3 +9,7 @@ faster-whisper
 soundfile
 python-multipart
 pydub~=0.25.1
+chromadb~=1.0.15
+pinecone-client
+pinecone~=7.3.0
+python-dotenv~=1.1.1

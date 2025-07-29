@@ -1,10 +1,10 @@
 import os
 import tempfile
-
-from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import JSONResponse
-from pydub import AudioSegment
+from fastapi import APIRouter, UploadFile, File, Form
 
+from app.services import embedding
+from app.services.embedding import embed_and_store, preview_vectors
 from app.services.transcribe_audio import transcribe_audio
 
 router = APIRouter()
@@ -16,21 +16,12 @@ async def ask_question_with_text(question: str = Form(None)):
     else:
         return JSONResponse({"error": "No question provided"}, status_code=400)
 
-def convert_to_16k_mono(input_path: str, output_path: str):
-    audio = AudioSegment.from_file(input_path)
-    audio = audio.set_frame_rate(16000).set_channels(1)
-    audio.export(output_path, format="wav")
-
 @router.post("/ask_audio")
 async def ask_question_with_audio(audio: UploadFile = File(None)):
     if audio:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
             tmp.write(await audio.read())
             tmp_path = tmp.name
-
-        # 2. Convert audio to 16kHz mono WAV
-        converted_path = tmp_path + "_16k.wav"
-        convert_to_16k_mono(tmp_path, converted_path)
 
         transcript = transcribe_audio(tmp_path)
         os.remove(tmp_path)
@@ -39,6 +30,27 @@ async def ask_question_with_audio(audio: UploadFile = File(None)):
     else:
         return JSONResponse({"error": "No audio provided"}, status_code=400)
 
+@router.post("/upload_document")
+async def upload_document(file: UploadFile):
+    if not (file.filename.endswith(".pdf") or file.filename.endswith(".docx")):
+        return JSONResponse(status_code=400, content={"error": "Only PDF/DOCX files allowed"})
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+        tmp.write(await file.read())
+        tmp_path = tmp.name
+
+    try:
+        result = embed_and_store(tmp_path)
+        return {"message": "File processed", "chunks": result["num_chunks"]}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+    finally:
+        os.remove(tmp_path)
+
+@router.get("/test")
+async def testtest():
+    results = preview_vectors(['What are the projected impacts of climate change on wheat yields?'])
+    return {"results": results}
 
 #         # Pass transcript through RAG pipeline
 #         # chunks = embed_and_retrieve(transcript)
