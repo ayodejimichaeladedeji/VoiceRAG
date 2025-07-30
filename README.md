@@ -1,4 +1,3 @@
-VoiceRAG
 # 🎙️ Voice & Text Assistant with RAG
 
 This project enables users to upload documents and ask questions through **voice** or **text**. It leverages **Retrieval-Augmented Generation (RAG)** to provide intelligent, context-aware answers using vector similarity search and generative AI.
