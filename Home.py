@@ -6,8 +6,9 @@ st.set_page_config(page_title="Voice Tutor", layout="centered")
 
 API_URL = "http://127.0.0.1:8000/api"
 
-st.title("🎙️ Voice Tutor for Academic Papers")
+st.title("Text & Voice Assistant 📚🎙️")
 st.markdown("Ask a question by **typing** or **recording your voice**.")
+st.markdown("Use the sidebar to switch between voice query and document upload.")
 
 input_mode = st.radio("Choose input method:", ["Text", "Voice"], horizontal=True)
 
@@ -24,7 +25,7 @@ if input_mode == "Text":
                 )
                 response.raise_for_status()
                 result = response.json()
-                st.success(result.get("question", "No answer returned."))
+                st.success(result.get("answer", "No answer returned."))
             except Exception as e:
                 st.error(f"Error: {e}")
 
@@ -44,7 +45,6 @@ else:
                     response = requests.post(f"{API_URL}/ask_audio", files=files)
                     response.raise_for_status()
                     result = response.json()
-                    # st.markdown(f"**Transcript:** {result.get('transcript', '')}")
-                    st.success(result.get('transcript', 'No answer returned.'))
+                    st.success(result.get("answer", "No answer returned."))
                 except Exception as e:
                     st.error(f"Error sending audio: {e}")
