@@ -35,7 +35,7 @@ INDEX_NAME=your_index_name
 streamlit run Home.py
 ```
 
-### 3️⃣ Start The FastAPI Server
+### 4️⃣ Start The FastAPI Server
 ```bash
 uvicorn main:app --reload
 ```
