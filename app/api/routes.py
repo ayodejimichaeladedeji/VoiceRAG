@@ -1,12 +1,12 @@
 import os
 import tempfile
+
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, UploadFile, File, Form
 
-from app.services import embedding
-from app.services.embedding import embed_and_store, preview_vectors
 from app.services.rag_pipeline import answer_with_rag
 from app.services.transcribe_audio import transcribe_audio
+from app.services.embedding import embed_and_store, preview_vectors
 
 router = APIRouter()
 
@@ -39,16 +39,16 @@ async def ask_question_with_audio(audio: UploadFile = File(...)):
         return JSONResponse(status_code=500, content={"error": str(e)})
 
 @router.post("/upload_document")
-async def upload_document(file: UploadFile):
+async def upload_document(file: UploadFile = File(...)):
     if not (file.filename.endswith(".pdf") or file.filename.endswith(".docx")):
         return JSONResponse(status_code=400, content={"error": "Only PDF/DOCX files allowed"})
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
         tmp.write(await file.read())
         tmp_path = tmp.name
-
     try:
         result = embed_and_store(tmp_path)
+        os.remove(tmp_path)
         return {"message": "File processed", "chunks": result["num_chunks"]}
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})

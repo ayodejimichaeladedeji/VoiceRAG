@@ -1,10 +1,9 @@
 import os
 import fitz
 import uuid
-import pinecone
 from google import genai
 from dotenv import load_dotenv
-from pinecone import Pinecone, ServerlessSpec, EmbeddingsList
+from pinecone import Pinecone, ServerlessSpec
 
 load_dotenv()
 
@@ -21,9 +20,7 @@ if os.getenv("INDEX_NAME") not in existing_indexes:
     )
 
 index = pc.Index(os.getenv("INDEX_NAME"))
-
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-
 
 def embed_texts(texts: list[str]):
     response = client.models.embed_content(
@@ -34,7 +31,6 @@ def embed_texts(texts: list[str]):
         }
     )
     return response.embeddings
-
 
 def parse_pdf(file_path: str) -> str:
     doc = fitz.open(file_path)
@@ -68,7 +64,6 @@ def embed_and_store(file_path: str):
 
     return {"num_chunks": len(chunks), "uploaded": len(vectors)}
 
-
 def preview_vectors(query, top_k=5):
     query_embedding_obj = embed_texts(query)[0]
     query_vector = query_embedding_obj.values
@@ -84,10 +79,3 @@ def preview_vectors(query, top_k=5):
             "text": match["metadata"].get("text")
         })
     return response
-
-# # === Query Pinecone with a question ===
-# def retrieve_relevant_chunks(query: str, top_k=5):
-#     query_vector = embed_texts([query])[0]
-#     result = index.query(vector=query_vector, top_k=top_k, include_metadata=True)
-#
-#     return [match["metadata"]["text"] for match in result.get("matches", [])]
