@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: voice-rag-backend:v1
+    ports:
+      - "8000:8000"
+    environment:
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - INDEX_NAME=${INDEX_NAME}
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: voice-rag-frontend:v1
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    volumes:
+      - ./static:/app/frontend

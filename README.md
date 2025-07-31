@@ -16,11 +16,12 @@ This project enables users to upload documents and ask questions through **voice
 
 ## 🚀 Getting Started
 
-### 1️⃣ Install Dependencies
-```bash
-pip install -r requirements.txt
+### 1️⃣ Install Requirements
 ```
-#### 2️⃣ Configuration
+1. Docker
+2. Docker Compose
+```
+#### 2️⃣ Set Up Environment Variables
 Create a `.env` file in the root directory and add the following environment variables. Replace the placeholder values with your actual API keys and other configurations:
 
 ```env
@@ -29,12 +30,13 @@ GEMINI_API_KEY=your_gemini_api_key
 INDEX_NAME=your_index_name
 ```
 
-### 3️⃣ Start The Streamlit Frontend
+### 3️⃣ Start with Docker Compose
 ```bash
-streamlit run Home.py
+docker compose --build -d
 ```
 
-### 4️⃣ Start The FastAPI Server
-```bash
-uvicorn main:app --reload
+### 4️⃣ Access
+```
+Access The Streamlit frontend at http://localhost:8501
+Access The FastAPI backend at http://localhost:8000
 ```

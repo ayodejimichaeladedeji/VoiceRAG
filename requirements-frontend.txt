@@ -1,0 +1,5 @@
+streamlit~=1.47.1
+requests~=2.32.4
+pydantic
+streamlit-audiorecorder
+soundfile

@@ -4,7 +4,7 @@ from audiorecorder import audiorecorder
 
 st.set_page_config(page_title="Voice Tutor", layout="centered")
 
-API_URL = "http://127.0.0.1:8000/api"
+API_URL = "http://backend:8000/api"
 
 st.title("Text & Voice Assistant 📚🎙️")
 st.markdown("Ask a question by **typing** or **recording your voice**.")

@@ -4,9 +4,9 @@ import tempfile
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, UploadFile, File, Form
 
-from app.services.rag_pipeline import answer_with_rag
-from app.services.transcribe_audio import transcribe_audio
-from app.services.embedding import embed_and_store, preview_vectors
+from services.rag_pipeline import answer_with_rag
+from services.transcribe_audio import transcribe_audio
+from services.embedding import embed_and_store, preview_vectors
 
 router = APIRouter()
 

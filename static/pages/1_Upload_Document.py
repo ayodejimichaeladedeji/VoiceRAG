@@ -3,7 +3,7 @@ import requests
 
 st.set_page_config(page_title="Upload Document", layout="centered")
 
-API_URL = "http://127.0.0.1:8000/api"
+API_URL = "http://backend:8000/api"
 
 st.title("📄 Upload and Embed Academic Document")
 

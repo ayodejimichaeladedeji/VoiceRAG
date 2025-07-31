@@ -1,7 +1,7 @@
 import os
 from google import genai
 from pinecone import Pinecone
-from app.services.embedding import embed_texts
+from services.embedding import embed_texts
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 index = pc.Index(os.getenv("INDEX_NAME"))
